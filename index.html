@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>login the site</title>
+  <style>
+    /* ================= GLOBAL ================= */
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      font-family: monospace;
+    }
+
+    /* ================= FLOATING IMAGES ================= */
+    .floating-img {
+      position: absolute;
+      width: clamp(40px, 8vw, 130px);
+      max-width: 130px;
+      animation: floatMove 8s infinite linear, glitchImg 0.2s infinite;
+    }
+
+    @keyframes floatMove {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      25% {
+        transform: translate(35vw, -10vh);
+      }
+
+      50% {
+        transform: translate(60vw, 20vh);
+      }
+
+      75% {
+        transform: translate(10vw, 40vh);
+      }
+
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    @keyframes glitchImg {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+
+      50% {
+        filter: hue-rotate(90deg);
+      }
+
+      100% {
+        filter: hue-rotate(-90deg);
+      }
+    }
+
+    /* ================= MATRIX ================= */
+    #matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* ================= BOOT SCREEN ================= */
+    #boot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: #0f0;
+      font-size: 2vw;
+      padding: 2vw;
+      white-space: pre-line;
+      font-family: monospace;
+    }
+
+    /* ================= WELCOME ================= */
+    #welcome {
+      position: fixed;
+      top: 12%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(18px, 5vw, 28px);
+      color: #0f0;
+      opacity: 0;
+      text-shadow: 0 0 2vw #0f0;
+      text-align: center;
+    }
+
+    /* ================= LOGIN CARD ================= */
+    #portal {
+      position: fixed;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(90%, 320px);
+      background: rgba(0, 0, 0, 0.8);
+      padding: min(5%, 20px);
+      border: 2px solid #0f0;
+      box-shadow: 0 0 2vw #0f0;
+      display: none;
+      color: #0f0;
+    }
+
+    input,
+    button {
+      width: 100%;
+      font-size: clamp(14px, 4vw, 18px);
+      padding: clamp(8px, 3vw, 12px);
+      margin-top: 2vw;
+      background: #000;
+      border: 1px solid #0f0;
+      color: #0f0;
+      box-shadow: 0 0 1vw #0f0;
+    }
+
+    button {
+      border: 2px solid #0f0;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1vw;
+      margin-top: 3vw;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* ================= ERROR ================= */
+    #errorBox {
+      color: red;
+      font-size: 3.5vw;
+      margin-top: 2vw;
+      display: none;
+    }
+
+    /* ================= ACCESS ================= */
+    #accessBox {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      font-size: clamp(24px, 8vw, 36px);
+      color: #0f0;
+      text-shadow: 0 0 2vw #0f0;
+      text-align: center;
+    }
+
+    /* ================ GLITCH PIECES ================ */
+    .glitchPiece {
+      position: absolute;
+      width: clamp(30px, 10vw, 50px);
+      height: clamp(30px, 10vw, 50px);
+      max-width: 50px;
+      max-height: 50px;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      z-index: 50;
+    }
+
+    /* ================= LOGO ================= */
+    #logo {
+      position: fixed;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #0f0;
+      font-size: clamp(24px, 6vw, 36px);
+      font-weight: bold;
+      text-shadow: 0 0 2vw #0f0;
+      text-align: center;
+    }
+
+    /* ================= MEDIA QUERIES ================= */
+    @media (max-width:600px) {
+      .floating-img {
+        width: clamp(30px, 15vw, 60px);
+      }
+
+      #portal {
+        width: 90%;
+        padding: 5%;
+      }
+
+      input,
+      button {
+        font-size: clamp(14px, 5vw, 16px);
+        padding: 3%;
+      }
+
+      #logo {
+        font-size: clamp(20px, 10vw, 28px);
+      }
+
+      #welcome {
+        font-size: clamp(16px, 8vw, 24px);
+      }
+
+      #accessBox {
+        font-size: clamp(20px, 10vw, 28px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- صور -->
+  <img src="download.png" class="floating-img" style="top:10%; left:5%;">
+  <img src="download.jpg" class="floating-img" style="top:60%; left:20%;">
+  <img src="images.jpg" class="floating-img" style="top:25%; left:70%;">
+  <img src="Screenshot_20250316-083903~2.png" class="floating-img" style="top:50%; left:50%; right: 30%;">
+
+  <!-- BOOT -->
+  <div id="boot"></div>
+
+  <!-- MATRIX BG -->
+  <canvas id="matrix"></canvas>
+
+  <!-- LOGO -->
+  <div id="logo">NET MASTER</div>
+
+  <!-- WELCOME -->
+  <div id="welcome">WELCOME</div>
+
+  <!-- LOGIN PORTAL -->
+  <div id="portal">
+    <h2 style="text-align:center;margin:0 0 3vw 0;">Login to learn Network</h2>
+    <input id="user" placeholder="username">
+    <input id="pass" type="password" placeholder="password">
+    <button onclick="login()">Login</button>
+    <button onclick="createAccount()">Create Account</button>
+    <div id="errorBox"></div>
+  </div>
+
+  <!-- ACCESS -->
+  <div id="accessBox">ACCESS GRANTED</div>
+
+  <script>
+    /* MATRIX BACKGROUND */
+    let c = document.getElementById("matrix");
+    let ctx = c.getContext("2d");
+    let letters = "01<>$#@%/*".split("");
+    let fontSize = 17;
+    let columns = c.width / fontSize;
+    let drops = [];
+    for (let i = 0; i < columns; i++) drops[i] = 1;
+
+    function resizeCanvas() {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      columns = c.width / fontSize;
+      drops = Array.from({ length: columns }, () => 1);
+    }
+    function matrix() {
+      ctx.fillStyle = "rgba(0,0,0,0.07)";
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = "#0f0";
+      ctx.font = fontSize + "px monospace";
+      drops.forEach((y, i) => {
+        let txt = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(txt, i * fontSize, y * fontSize);
+        if (y * fontSize > c.height && Math.random() > 0.95) drops[i] = 0;
+        drops[i]++;
+      });
+    }
+    setInterval(matrix, 40);
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    /* BOOT SCREEN */
+    let boot = document.getElementById("boot");
+    let bootLines = [
+      "[BOOT] Initializing NET MASTER core...",
+      "[SYS] Loading low-level modules...",
+      "[DRIVER] Starting GPU acceleration...",
+      "[SECURE] Injecting encrypted layers...",
+      "[SCAN] Checking memory blocks...",
+      "[OK] System stable.",
+      "",
+      "[LAUNCH] Preparing interface..."
+    ];
+    let i = 0;
+    function bootRun() {
+      boot.innerHTML += bootLines[i] + "\n";
+      i++;
+      if (i < bootLines.length) setTimeout(bootRun, 300);
+      else setTimeout(() => { boot.style.display = "none"; showWelcome(); }, 700);
+    }
+    bootRun();
+
+    /* WELCOME */
+    function showWelcome() {
+      let w = document.getElementById("welcome");
+      let text = "WELCOME TO NET-LAB";
+      let j = 0;
+      let type = setInterval(() => {
+        w.style.opacity = 1;
+        w.innerHTML = text.slice(0, j) + "█";
+        j++;
+        if (j > text.length) {
+          clearInterval(type);
+          w.innerHTML = text;
+          setTimeout(showPortal, 1200);
+        }
+      }, 80);
+    }
+
+    /* PORTAL SHOW */
+    function showPortal() {
+      portal.style.display = "block";
+      spawnGlitch();
+    }
+
+    /* GLITCH PIECES */
+    let glitchImages = [
+      "download.png",
+      "download.jpg",
+      "images.jpg",
+      "Screenshot_20250316-083903~2.png"
+    ];
+    let glitchPieces = [];
+
+    function spawnGlitch() {
+      glitchImages.forEach(src => {
+        for (let r = 0; r < 5; r++) {
+          for (let c = 0; c < 5; c++) {
+            let p = document.createElement('div');
+            p.className = "glitchPiece";
+            p.style.backgroundImage = `url(${src})`;
+            p.style.backgroundPosition = `${-c * 70}px ${-r * 70}px`;
+            document.body.appendChild(p);
+            glitchPieces.push(p);
+          }
+        }
+      });
+      setInterval(() => {
+        glitchPieces.forEach(p => {
+          let x = (innerWidth / 2) + Math.random() * 300 - 150;
+          let y = (innerHeight / 2) + Math.random() * 300 - 150;
+          p.style.opacity = Math.random();
+          p.style.transform = `translate(${x}px,${y}px) rotate(${Math.random() * 40 - 20}deg)`;
+        });
+      }, 200);
+    }
+
+    /* LOGIN SYSTEM */
+    function createAccount() {
+      let u = user.value.trim();
+      let p = pass.value.trim();
+      if (!u || !p) {
+        errorBox.innerText = "املأ البيانات"; errorBox.style.display = "block"; return;
+      }
+
+      localStorage.setItem("username", u);
+      localStorage.setItem("password", p);
+      errorBox.style.display = "none"; alert("تم إنشاء الحساب");
+      let su = localStorage.getItem("username");
+      let sp = localStorage.getItem("password");
+      if (u === su && p === sp) {
+        portal.style.display = "none";
+        accessBox.style.display = "block";
+        setTimeout(() => { window.location = "http://gitawa1962-star.github.io/Net__ab-/"; }, 1500);
+      }
+    }
+
+    function login() {
+      let u = user.value.trim();
+      let p = pass.value.trim();
+      let su = localStorage.getItem("username");
+      let sp = localStorage.getItem("password");
+
+      if (!su || !sp) {
+        errorBox.innerText = "لا يوجد حساب محفوظ — أنشئ واحد أولاً";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      if (u === su && p === sp) {
+        portal.style.display = "none";
+        accessBox.style.display = "block";
+        setTimeout(() => {
+          window.location = "https://gitawa1962-star.github.io/Net____.lab-/";
+
+        }, 1500);
+      } else {
+        errorBox.innerText = "بيانات خاطئة";
+        errorBox.style.display = "block";
+      }
+    }
+  </script>
+</body>
+
+</html>
